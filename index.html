@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andre Official</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        transition: background 0.5s ease;
+    }
+    .full-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+    }
+    /* Loading */
+    #loading .spinner {
+        border: 5px solid rgba(255,255,255,0.2);
+        border-top: 5px solid white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Card style */
+    .card {
+        background: rgba(255,255,255,0.05);
+        padding: 30px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 0 25px rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        animation: fadeIn 0.5s ease;
+    }
+    .profile-pic {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255,255,255,0.5);
+        margin-bottom: 15px;
+    }
+    .btn {
+        display: block;
+        width: 100%;
+        background: rgba(255,255,255,0.1);
+        border: none;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        background: rgba(255,255,255,0.2);
+        transform: scale(1.03);
+    }
+    /* Warning text */
+    .warning {
+        text-align: left;
+        font-size: 14px;
+        margin-top: 20px;
+        opacity: 0.9;
+    }
+    .warning p {
+        margin: 5px 0;
+    }
+    /* Video prank (canvas mode) */
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 50px); /* Biar URL bar tetap kelihatan */
+        overflow: hidden;
+    }
+    .video-wrapper video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+</head>
+<body>
+
+<!-- Step 1: Welcome Screen -->
+<div id="welcome" class="full-center">
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" class="profile-pic" alt="Logo">
+        <h2>Selamat datang di web Andre Official</h2>
+        <p>Klik tombol di bawah untuk masuk ke halaman utama</p>
+        <button class="btn" onclick="showLoading()">Masuk ke Menu Utama</button>
+    </div>
+</div>
+
+<!-- Step 2: Loading Animation -->
+<div id="loading" class="full-center hidden">
+    <div class="spinner"></div>
+    <p>Memuat halaman...</p>
+</div>
+
+<!-- Step 3: Main Content -->
+<div id="main" class="full-center hidden">
+    <div class="card" id="content">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" class="profile-pic" alt="Logo">
+        <h2>Andre Official</h2>
+        <p>Dari Indonesia</p>
+        <button class="btn" onclick="startPrank()">WhatsApp Number</button>
+        <button class="btn" onclick="startPrank()">Produk</button>
+        <button class="btn" onclick="startPrank()">Semua Menu</button>
+
+        <div class="warning">
+            <p>1. Jangan sebar web ini ke orang lain karena sangat berharga.</p>
+            <p>2. Web ini adalah web nomor 1 di Indonesia karena banyak source kode gratis.</p>
+            <p>3. Web ini dibuat oleh Andre Official, hargai pembuat untuk tidak merusak isi web tersebut!!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function smoothSwitch(hideId, showId, delay = 500) {
+        document.getElementById(hideId).classList.add("hidden");
+        setTimeout(() => {
+            document.getElementById(hideId).style.display = "none";
+            const showEl = document.getElementById(showId);
+            showEl.style.display = "flex";
+            setTimeout(() => {
+                showEl.classList.remove("hidden");
+            }, 50);
+        }, delay);
+    }
+
+    function showLoading() {
+        smoothSwitch("welcome", "loading");
+        setTimeout(() => {
+            smoothSwitch("loading", "main");
+        }, 2000);
+    }
+
+    function startPrank() {
+        document.getElementById("content").innerHTML = `
+            <h2>Udah yakin belum?</h2>
+            <button class="btn" onclick="stepTwo()">Yakin</button>
+        `;
+    }
+
+    function stepTwo() {
+        document.getElementById("content").innerHTML = `
+            <h2>Kalo yakin pencet aja</h2>
+            <button class="btn" onclick="showVideo()">Lanjut</button>
+        `;
+    }
+
+    function showVideo() {
+        smoothSwitch("main", "videoPrank");
+        let scream = document.getElementById("screamSound");
+        scream.currentTime = 0;
+        scream.play();
+    }
+
+    // Tambahkan elemen video prank dan audio (canvas mode)
+    document.body.insertAdjacentHTML("beforeend", `
+        <div id="videoPrank" class="full-center hidden" style="display:none;">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline id="prankVideo">
+                    <source src="prank.mp4" type="video/mp4">
+                    Browser kamu tidak mendukung video.
+                </video>
+            </div>
+        </div>
+        <audio id="screamSound" src="audio/scream.mp3"></audio>
+    `);
+</script>
+
+</body>
+</html>
